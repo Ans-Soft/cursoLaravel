@@ -1,0 +1,126 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\ExpenseReport;
+
+class ExpenseReportController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view("expenseReport.index", [
+            "expenseReports" => ExpenseReport::all()
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view("expenseReport.create");
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validaData = $request->validate([
+           "title" => "required" 
+        ]);
+
+        $this->validate(
+            $request,
+            [
+                "title" => "required|min:10"
+            ]
+        );
+
+        $report = new ExpenseReport();
+        $report->title = $request->get("title");
+        $report->save();
+
+        return redirect("/expense_reports");
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $report = ExpenseReport::find($id);
+        return view("expenseReport.edit", [
+            "report" => $report 
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, ExpenseReport $expense_report)
+    {
+
+        $this->validate(
+            $request,
+            [
+                "title" => "required|min:10"
+            ]
+        );
+        $expense_report->title = $request->get("title");
+        $expense_report->save();
+
+        return redirect("/expense_reports")->with('success',"Datos actualizados");
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $report = ExpenseReport::find($id);
+        $report ->delete();
+
+        return redirect("/expense_reports");
+    }
+
+    public function confirmDelete($id, Request $request) {
+        $report = ExpenseReport::find($id);
+        return view("expenseReport.confirmDelete", [
+            "report" => $report
+        ]);
+    }
+}
