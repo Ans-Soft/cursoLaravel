@@ -45,7 +45,7 @@ class ExpenseReportController extends Controller
         $this->validate(
             $request,
             [
-                "title" => "required|min:10"
+                "title" => "required|min:5"
             ]
         );
 
@@ -94,7 +94,7 @@ class ExpenseReportController extends Controller
         $this->validate(
             $request,
             [
-                "title" => "required|min:10"
+                "title" => "required|min:5"
             ]
         );
         $expense_report->title = $request->get("title");
