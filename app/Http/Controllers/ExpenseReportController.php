@@ -140,7 +140,7 @@ class ExpenseReportController extends Controller
         $report = ExpenseReport::find($id);
         Mail::to($request->get("email"))->send(new SummaryReport($report));
         
-        return $redirect("/expense_reports/" . $id);
+        return redirect("/expense_reports/" . $id);
 
         
     }
